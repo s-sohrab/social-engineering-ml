@@ -1,0 +1,32 @@
+{
+  "language": "fa",
+  "computed_at_utc": "2026-06-13T07:59:00.000303+00:00",
+  "total_qa_records": 3330,
+  "unique_knowledge_article_ids": 0,
+  "unique_reference_books": 1,
+  "question_index_distribution": {
+    "1": 3330
+  },
+  "character_length_statistics": {
+    "question": {
+      "mean": 81.08,
+      "min": 12,
+      "max": 181
+    },
+    "answer": {
+      "mean": 163.48,
+      "min": 3,
+      "max": 481
+    }
+  },
+  "records_per_reference_book_internal_id": {
+    "unknown": 3330
+  },
+  "records_per_reference_book": {
+    "unknown": 3330
+  },
+  "schema_fields": [
+    "answer",
+    "question"
+  ]
+}

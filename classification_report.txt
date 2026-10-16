@@ -1,0 +1,16 @@
+Classification Report - Linear SVM
+======================================================================
+               precision    recall  f1-score   support
+
+      baiting     1.0000    1.0000    1.0000         7
+impersonation     0.8750    1.0000    0.9333        35
+     phishing     0.9833    0.9219    0.9516        64
+     smishing     0.8571    0.8571    0.8571         7
+ tech_support     1.0000    1.0000    1.0000         6
+      vishing     0.8333    0.7692    0.8000        13
+
+     accuracy                         0.9318       132
+    macro avg     0.9248    0.9247    0.9237       132
+ weighted avg     0.9348    0.9318    0.9316       132
+
+Overall Accuracy: 0.9318
