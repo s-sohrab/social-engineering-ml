@@ -145,11 +145,7 @@ This project is released for **research and educational** purposes. The underlyi
 
 ## 👤 Author
 
-**[Your Name]**
-- 📧 Email: [your.email@example.com]
-- 🎓 [Your University]
-- 🔗 [LinkedIn / Personal Website]
-
+**[samad sohrab]**
 ---
 
 ## 📚 Citation
@@ -159,7 +155,7 @@ If you use this project in your research, please cite:
 ```bibtex
 @misc{your-project-2026,
   title  = {Social Engineering Attack Classification in Persian Text},
-  author = {[Your Name]},
+  author = {[samad sohrab]},
   year   = {2026},
   url    = {https://github.com/YOUR-USERNAME/social-engineering-ml}
 }
@@ -283,11 +279,7 @@ python code/plot_results.py        # نمودارها
 
 ## 👤 نویسنده
 
-**[نام شما]**
-- 📧 ایمیل: [your.email@example.com]
-- 🎓 [دانشگاه شما]
-- 🔗 [لینکدین / وب‌سایت شخصی]
-
+**[صمد سهراب]**
 ---
 
 ## 🙏 تقدیر
