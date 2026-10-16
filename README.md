@@ -59,7 +59,7 @@ social-engineering-ml/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/social-engineering-ml.git
+git clone https://github.com/s-sohrab/social-engineering-ml.git
 cd social-engineering-ml
 ```
 
@@ -157,7 +157,7 @@ If you use this project in your research, please cite:
   title  = {Social Engineering Attack Classification in Persian Text},
   author = {[samad sohrab]},
   year   = {2026},
-  url    = {https://github.com/YOUR-USERNAME/social-engineering-ml}
+  url    = {https://github.com/s-sohrab/social-engineering-ml}
 }
 ```
 
@@ -207,7 +207,7 @@ We thank the creators of the [Social Engineering Q&A Dataset (Persian)](https://
 ### ۱. کلون کردن مخزن
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/social-engineering-ml.git
+git clone https://github.com/s-sohrab/social-engineering-ml.git
 cd social-engineering-ml
 ```
 
