@@ -25,3 +25,13 @@ Thumbs.db
 # Sensitive files
 .env
 *.key
+
+# Delivery package
+delivery/
+*.zip
+
+# Personal notes
+powershell.txt
+
+# Duplicate files
+*.xlsx

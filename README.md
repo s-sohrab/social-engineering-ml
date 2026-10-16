@@ -284,4 +284,8 @@ python code/plot_results.py        # نمودارها
 
 ## 🙏 تقدیر
 
+<<<<<<< HEAD
 از سازندگان دیتاست [Social Engineering Q&A Dataset (Persian)](https://huggingface.co/datasets/smd20/social-engineering-qa-persian) که دیتاست خود را به‌صورت عمومی منتشر کردند، صمیمانه سپاسگزاریم.
+=======
+از سازندگان دیتاست [Social Engineering Q&A Dataset (Persian)](https://huggingface.co/datasets/smd20/social-engineering-qa-persian) که دیتاست خود را به‌صورت عمومی منتشر کردند، صمیمانه سپاسگزاریم
+>>>>>>> 6023d14 (Update .gitignore)
