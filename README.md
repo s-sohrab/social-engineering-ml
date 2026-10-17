@@ -6,8 +6,6 @@
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3+-orange.svg)](https://scikit-learn.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> **Persian version below** | **نسخه فارسی در ادامه**
-
 ---
 
 ## 📖 Overview
@@ -15,7 +13,7 @@
 This project is organized in **two phases**:
 
 ### Phase 1: Classification of Social Engineering Q&A
-- **Dataset:** [`smd20/social-engineering-qa-persian`](https://huggingface.co/datasets/smd20/social-engineering-qa-persian) (3,330 Persian Q&A pairs)
+- **Dataset:** `smd20/social-engineering-qa-persian` (3,330 Persian Q&A pairs)
 - **Task:** Classify the type of social engineering attack from question-answer text
 - **Result:** **Linear SVM** with **Macro-F1 = 0.9237** and **Accuracy = 0.93**
 
@@ -29,6 +27,7 @@ This project is organized in **two phases**:
 ---
 
 ## 📂 Project Structure
+
 social-engineering-ml/
 ├── phase1/ # Phase 1: Q&A classification
 │ ├── code/ # Python scripts
@@ -42,7 +41,6 @@ social-engineering-ml/
 ├── README.md
 └── requirements.txt
 
-text
 
 ---
 
@@ -67,8 +65,10 @@ text
 ```bash
 git clone https://github.com/s-sohrab/social-engineering-ml.git
 cd social-engineering-ml
+
+
 2. Create virtual environment
-bash
+
 python -m venv .venv
 
 # Windows:
@@ -76,22 +76,26 @@ python -m venv .venv
 
 # macOS/Linux:
 source .venv/bin/activate
+
 3. Install dependencies
-bash
+
 pip install -r requirements.txt
+
 4. Run Phase 1
-bash
+
 python phase1/code/label_and_split.py
 python phase1/code/train_models.py
 python phase1/code/error_analysis.py
+
 5. Run Phase 2
-bash
 # First, install Ollama and pull the model:
 # ollama pull qwen2.5:7b
 
 python phase2/code/generate_attack_texts.py
 python phase2/code/train_models_phase2.py
 python phase2/code/compare_phases.py
+
+
 📊 Results
 Phase 1: Q&A Classification (5-Fold CV)
 Model	Mean Macro-F1	Std
@@ -138,13 +142,14 @@ This project is released for research and educational purposes under the MIT Lic
 Samad Sohrab
 
 📚 Citation
-bibtex
 @misc{sohrab2026social,
   title  = {Social Engineering Attack Classification in Persian Text},
   author = {Sohrab, Samad},
   year   = {2026},
   url    = {https://github.com/s-sohrab/social-engineering-ml}
 }
+
+<div dir="rtl">
 🇮🇷 نسخه فارسی
 🛡️ تشخیص خودکار نوع حملات مهندسی اجتماعی در متون فارسی
 طبقه‌بندی چندکلاسه‌ی خودکار حملات مهندسی اجتماعی در متون فارسی با استفاده از یادگیری ماشین کلاسیک.
@@ -229,6 +234,7 @@ Macro-F1	۰.۹۲۳۷	۰.۶۸۹۱
 📜 لایسنس
 این پروژه برای اهداف پژوهشی و آموزشی تحت لایسنس MIT منتشر شده است.
 
-
 👤 نویسنده
 صمد سهراب
+
+</div> ```
