@@ -1,0 +1,27 @@
+{
+  "phase": "phase2",
+  "n_samples": 246,
+  "n_train": 196,
+  "n_test": 50,
+  "cv_results": {
+    "Naive Bayes": {
+      "mean": 0.3790890721678176,
+      "std": 0.05983172352485657
+    },
+    "Logistic Regression": {
+      "mean": 0.6172824148675541,
+      "std": 0.06645142600385572
+    },
+    "Linear SVM": {
+      "mean": 0.6272113507407624,
+      "std": 0.07404595516180999
+    },
+    "Random Forest": {
+      "mean": 0.555013196870782,
+      "std": 0.052575938030991975
+    }
+  },
+  "best_model": "Linear SVM",
+  "test_accuracy": 0.68,
+  "test_macro_f1": 0.6891138101664417
+}

@@ -4,8 +4,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3+-orange.svg)](https://scikit-learn.org/)
-[![License](https://img.shields.io/badge/License-Research-green.svg)](#-license)
-[![Dataset](https://img.shields.io/badge/Dataset-HuggingFace-yellow.svg)](https://huggingface.co/datasets/smd20/social-engineering-qa-persian)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 > **Persian version below** | **نسخه فارسی در ادامه**
 
@@ -13,44 +12,51 @@
 
 ## 📖 Overview
 
-This project defines a novel machine learning task on the public dataset [`smd20/social-engineering-qa-persian`](https://huggingface.co/datasets/smd20/social-engineering-qa-persian). Using a transparent keyword-based weak labeling approach, 658 samples were extracted across 6 main social engineering attack classes.
+This project is organized in **two phases**:
 
-Four classical machine learning models (Naive Bayes, Logistic Regression, Linear SVM, Random Forest) were trained within a standard TF-IDF-based pipeline, with full adherence to data leakage prevention principles.
+### Phase 1: Classification of Social Engineering Q&A
+- **Dataset:** [`smd20/social-engineering-qa-persian`](https://huggingface.co/datasets/smd20/social-engineering-qa-persian) (3,330 Persian Q&A pairs)
+- **Task:** Classify the type of social engineering attack from question-answer text
+- **Result:** **Linear SVM** with **Macro-F1 = 0.9237** and **Accuracy = 0.93**
 
-**Key Result:** Linear SVM achieved **Macro-F1 = 0.9237** and **Accuracy = 0.93** on the held-out test set.
+### Phase 2: Classification of Generated Attack Texts
+- **Dataset:** 246 real attack texts generated from Phase 1 data using **Qwen 2.5 (7B)** via Ollama
+- **Task:** Classify the type of social engineering attack from realistic attack texts
+- **Result:** **Linear SVM** with **Macro-F1 = 0.6891** and **Accuracy = 0.68**
+
+**Key Finding:** Phase 2 is significantly harder than Phase 1 because real attack texts are more diverse and realistic than Q&A pairs.
+
+---
+
+## 📂 Project Structure
+social-engineering-ml/
+├── phase1/ # Phase 1: Q&A classification
+│ ├── code/ # Python scripts
+│ ├── data/ # Original dataset
+│ ├── results/ # Outputs (CSV, PNG)
+│ └── dataset_labeled.jsonl # Labeled dataset
+├── phase2/ # Phase 2: Attack text classification
+│ ├── code/ # Generation & training scripts
+│ ├── data/ # Generated attack texts
+│ └── results/ # Phase 2 results
+├── README.md
+└── requirements.txt
+
+text
 
 ---
 
 ## 🎯 Target Classes
 
-| Class | Description | Samples |
-|---|---|---|
-| `phishing` | Email phishing | 320 |
-| `impersonation` | Identity impersonation | 177 |
-| `vishing` | Voice phishing | 65 |
-| `baiting` | Physical baiting | 34 |
-| `smishing` | SMS phishing | 33 |
-| `tech_support` | Tech support scam | 29 |
-| **Total** | — | **658** |
-
----
-
-## 📂 Project Structure
-
-```
-social-engineering-ml/
-├── code/                       # Python scripts
-│   ├── download_data.py        # Dataset download
-│   ├── label_and_split.py      # Weak labeling & split
-│   ├── train_models.py         # Train 4 models
-│   ├── error_analysis.py       # Error analysis
-│   └── plot_results.py         # Generate plots
-├── data/                       # Original dataset
-├── results/                    # Outputs (CSV, PNG)
-├── dataset_labeled.jsonl       # Labeled dataset
-├── requirements.txt            # Dependencies
-└── README.md
-```
+| Class | Description | Phase 1 Samples | Phase 2 Samples |
+|---|---|---|---|
+| `phishing` | Email phishing | 320 | 50 |
+| `impersonation` | Identity impersonation | 177 | 50 |
+| `vishing` | Voice phishing | 65 | 50 |
+| `baiting` | Physical baiting | 34 | 34 |
+| `smishing` | SMS phishing | 33 | 33 |
+| `tech_support` | Tech support scam | 29 | 29 |
+| **Total** | — | **658** | **246** |
 
 ---
 
@@ -61,11 +67,8 @@ social-engineering-ml/
 ```bash
 git clone https://github.com/s-sohrab/social-engineering-ml.git
 cd social-engineering-ml
-```
-
-### 2. Create virtual environment
-
-```bash
+2. Create virtual environment
+bash
 python -m venv .venv
 
 # Windows:
@@ -73,216 +76,159 @@ python -m venv .venv
 
 # macOS/Linux:
 source .venv/bin/activate
-```
-
-### 3. Install dependencies
-
-```bash
+3. Install dependencies
+bash
 pip install -r requirements.txt
-```
+4. Run Phase 1
+bash
+python phase1/code/label_and_split.py
+python phase1/code/train_models.py
+python phase1/code/error_analysis.py
+5. Run Phase 2
+bash
+# First, install Ollama and pull the model:
+# ollama pull qwen2.5:7b
 
-### 4. Run the pipeline
+python phase2/code/generate_attack_texts.py
+python phase2/code/train_models_phase2.py
+python phase2/code/compare_phases.py
+📊 Results
+Phase 1: Q&A Classification (5-Fold CV)
+Model	Mean Macro-F1	Std
+Naive Bayes	0.2288	±0.0320
+Logistic Regression	0.8466	±0.0436
+Linear SVM	0.8708	±0.0311
+Random Forest	0.8611	±0.0747
+Phase 2: Attack Text Classification (5-Fold CV)
+Model	Mean Macro-F1	Std
+Naive Bayes	0.3791	±0.0598
+Logistic Regression	0.6173	±0.0665
+Linear SVM	0.6272	±0.0740
+Random Forest	0.5550	±0.0526
+Final Test Performance (Linear SVM)
+Metric	Phase 1	Phase 2
+Accuracy	0.93	0.68
+Macro-F1	0.9237	0.6891
+🔬 Key Contributions
+First Persian benchmark for automatic classification of social engineering attacks.
 
-```bash
-python code/download_data.py       # Download dataset
-python code/label_and_split.py     # Label & split
-python code/train_models.py        # Train models
-python code/error_analysis.py      # Error analysis
-python code/plot_results.py        # Generate plots
-```
+Transparent weak labeling methodology based on linguistic keywords.
 
----
+Meaningful error analysis showing that all errors occur at conceptual boundaries.
 
-## 📊 Results
+Two-phase evaluation: comparing Q&A classification vs. real attack text classification.
 
-### Cross-Validation Performance (5-Fold Stratified)
+Model interpretability via extraction of top-10 keywords per class.
 
-| Model | Mean Macro-F1 | Std |
-|---|---|---|
-| Naive Bayes | 0.2288 | ±0.0320 |
-| Logistic Regression | 0.8466 | ±0.0436 |
-| **Linear SVM** | **0.8708** | **±0.0311** |
-| Random Forest | 0.8611 | ±0.0747 |
+🛠️ Technologies
+Language: Python 3.10
 
-### Final Performance of Linear SVM (Test Set)
+Data processing: pandas, numpy
 
-| Metric | Value |
-|---|---|
-| Accuracy | **0.93** |
-| Macro-F1 | **0.9237** |
-| Weighted-F1 | 0.93 |
+Machine Learning: scikit-learn
 
-### Error Analysis
+LLM for data generation: Qwen 2.5 (7B) via Ollama
 
-All 8 misclassified samples (6.1%) occurred between conceptually overlapping classes (`vishing` ↔ `impersonation`, `tech_support` ↔ `impersonation`), demonstrating **semantic learning** rather than pattern memorization.
+Visualization: matplotlib, seaborn
 
----
+📜 License
+This project is released for research and educational purposes under the MIT License.
 
-## 🔬 Key Contributions
+👤 Author
+Samad Sohrab
 
-1. **First Persian benchmark** for automatic classification of social engineering attacks.
-2. **Transparent weak labeling** methodology based on linguistic keywords.
-3. **Meaningful error analysis** showing that all errors occur at conceptual boundaries.
-4. **Model interpretability** via extraction of top-10 keywords per class.
-
----
-
-## 🛠️ Technologies
-
-- **Language:** Python 3.10
-- **Data processing:** pandas, numpy
-- **Machine Learning:** scikit-learn
-- **Dataset:** Hugging Face `datasets`
-- **Visualization:** matplotlib, seaborn
-
----
-
-## 📜 License
-
-This project is released for **research and educational** purposes. The underlying reference books remain the intellectual property of their respective authors and publishers.
-
----
-
-## 👤 Author
-
-**[samad sohrab]**
----
-
-## 📚 Citation
-
-If you use this project in your research, please cite:
-
-```bibtex
-@misc{your-project-2026,
+📚 Citation
+bibtex
+@misc{sohrab2026social,
   title  = {Social Engineering Attack Classification in Persian Text},
-  author = {[samad sohrab]},
+  author = {Sohrab, Samad},
   year   = {2026},
   url    = {https://github.com/s-sohrab/social-engineering-ml}
 }
-```
+🇮🇷 نسخه فارسی
+🛡️ تشخیص خودکار نوع حملات مهندسی اجتماعی در متون فارسی
+طبقه‌بندی چندکلاسه‌ی خودکار حملات مهندسی اجتماعی در متون فارسی با استفاده از یادگیری ماشین کلاسیک.
 
----
+📖 خلاصه پروژه
+این پروژه در دو فاز سازمان‌دهی شده است:
 
-## 🙏 Acknowledgments
+فاز اول: طبقه‌بندی پرسش‌وپاسخ‌های مهندسی اجتماعی
+دیتاست: smd20/social-engineering-qa-persian (۳,۳۳۰ جفت پرسش-پاسخ فارسی)
 
-We thank the creators of the [Social Engineering Q&A Dataset (Persian)](https://huggingface.co/datasets/smd20/social-engineering-qa-persian) for making their dataset publicly available.
+وظیفه: تشخیص نوع حمله از روی متن پرسش‌وپاسخ
 
----
----
+نتیجه: Linear SVM با Macro-F1 = 0.9237 و Accuracy = 0.93
 
-# 🇮🇷 نسخه فارسی
+فاز دوم: طبقه‌بندی متن‌های واقعی حمله
+دیتاست: ۲۴۶ متن واقعی حمله که با Qwen 2.5 (7B) و از طریق Ollama از داده‌های فاز اول تولید شده‌اند
 
-## 🛡️ تشخیص خودکار نوع حملات مهندسی اجتماعی در متون فارسی
+وظیفه: تشخیص نوع حمله از روی متن واقعی
 
-**طبقه‌بندی چندکلاسه‌ی خودکار حملات مهندسی اجتماعی در متون فارسی با استفاده از یادگیری ماشین کلاسیک.**
+نتیجه: Linear SVM با Macro-F1 = 0.6891 و Accuracy = 0.68
 
----
+یافته کلیدی: فاز دوم به‌مراتب سخت‌تر از فاز اول است، چون متن‌های واقعی حمله تنوع و پیچیدگی بیشتری نسبت به پرسش‌وپاسخ دارند.
 
-## 📖 خلاصه پروژه
+🎯 کلاس‌های هدف
+کلاس	توضیح	تعداد (فاز اول)	تعداد (فاز دوم)
+phishing	فیشینگ ایمیلی	۳۲۰	۵۰
+impersonation	جعل هویت	۱۷۷	۵۰
+vishing	فیشینگ صوتی	۶۵	۵۰
+baiting	طعمه‌گذاری فیزیکی	۳۴	۳۴
+smishing	فیشینگ پیامکی	۳۳	۳۳
+tech_support	کلاهبرداری پشتیبانی فنی	۲۹	۲۹
+جمع	—	۶۵۸	۲۴۶
+🚀 نحوه اجرا
+فاز اول
+bash
+python phase1/code/label_and_split.py
+python phase1/code/train_models.py
+python phase1/code/error_analysis.py
+فاز دوم
+bash
+# ابتدا Ollama نصب و مدل دانلود شود:
+# ollama pull qwen2.5:7b
 
-این پروژه یک وظیفه‌ی یادگیری ماشین جدید روی دیتاست عمومی [`smd20/social-engineering-qa-persian`](https://huggingface.co/datasets/smd20/social-engineering-qa-persian) تعریف می‌کند. با اعمال روش برچسب‌گذاری ضعیف مبتنی بر کلیدواژه، ۶۵۸ نمونه در قالب ۶ کلاس اصلی حمله مهندسی اجتماعی استخراج شد.
+python phase2/code/generate_attack_texts.py
+python phase2/code/train_models_phase2.py
+python phase2/code/compare_phases.py
+📊 نتایج
+فاز اول: طبقه‌بندی پرسش‌وپاسخ (۵-Fold CV)
+مدل	میانگین Macro-F1	انحراف معیار
+Naive Bayes	۰.۲۲۸۸	±۰.۰۳۲۰
+Logistic Regression	۰.۸۴۶۶	±۰.۰۴۳۶
+Linear SVM	۰.۸۷۰۸	±۰.۰۳۱۱
+Random Forest	۰.۸۶۱۱	±۰.۰۷۴۷
+فاز دوم: طبقه‌بندی متن حمله (۵-Fold CV)
+مدل	میانگین Macro-F1	انحراف معیار
+Naive Bayes	۰.۳۷۹۱	±۰.۰۵۹۸
+Logistic Regression	۰.۶۱۷۳	±۰.۰۶۶۵
+Linear SVM	۰.۶۲۷۲	±۰.۰۷۴۰
+Random Forest	۰.۵۵۵۰	±۰.۰۵۲۶
+عملکرد نهایی Linear SVM روی تست
+معیار	فاز اول	فاز دوم
+Accuracy	۰.۹۳	۰.۶۸
+Macro-F1	۰.۹۲۳۷	۰.۶۸۹۱
+🔬 نوآوری‌ها
+۱. اولین benchmark فارسی برای تشخیص خودکار نوع حملات مهندسی اجتماعی
+۲. روش برچسب‌گذاری ضعیف شفاف و قابل بازتولید
+۳. تحلیل خطای معنادار — تمام خطاها در مرزهای کلاس‌های هم‌پوشان مفهومی رخ داده‌اند
+۴. ارزیابی دوفازی: مقایسه طبقه‌بندی پرسش‌وپاسخ با طبقه‌بندی متن واقعی حمله
+۵. تفسیرپذیری مدل — استخراج ۱۰ کلمه‌ی کلیدی مؤثر در تصمیم‌گیری
 
-چهار مدل یادگیری ماشین کلاسیک (Naive Bayes، Logistic Regression، Linear SVM، Random Forest) در چارچوب یک خط لوله استاندارد مبتنی بر TF-IDF و با رعایت کامل اصول جلوگیری از نشت داده آموزش داده شدند.
+🛠️ فناوری‌ها
+زبان: Python 3.10
 
-**نتیجه‌ی کلیدی:** مدل Linear SVM با **Macro-F1 = 0.9237** و **Accuracy = 0.93** روی مجموعه تست دست‌نخورده بهترین عملکرد را نشان داد.
+پردازش داده: pandas, numpy
 
----
+یادگیری ماشین: scikit-learn
 
-## 🎯 کلاس‌های هدف
+مدل زبانی برای تولید داده: Qwen 2.5 (7B) از طریق Ollama
 
-| کلاس | توضیح | تعداد نمونه |
-|---|---|---|
-| `phishing` | فیشینگ ایمیلی | ۳۲۰ |
-| `impersonation` | جعل هویت | ۱۷۷ |
-| `vishing` | فیشینگ صوتی | ۶۵ |
-| `baiting` | طعمه‌گذاری فیزیکی | ۳۴ |
-| `smishing` | فیشینگ پیامکی | ۳۳ |
-| `tech_support` | کلاهبرداری پشتیبانی فنی | ۲۹ |
-| **جمع** | — | **۶۵۸** |
+مصورسازی: matplotlib, seaborn
 
----
-
-## 🚀 نحوه اجرا (فارسی)
-
-### ۱. کلون کردن مخزن
-
-```bash
-git clone https://github.com/s-sohrab/social-engineering-ml.git
-cd social-engineering-ml
-```
-
-### ۲. ساخت محیط مجازی
-
-```bash
-python -m venv .venv
-
-# ویندوز:
-.venv\Scripts\activate
-
-# مک / لینوکس:
-source .venv/bin/activate
-```
-
-### ۳. نصب پکیج‌ها
-
-```bash
-pip install -r requirements.txt
-```
-
-### ۴. اجرای پروژه
-
-```bash
-python code/download_data.py       # دانلود دیتاست
-python code/label_and_split.py     # برچسب‌گذاری و تقسیم
-python code/train_models.py        # آموزش مدل‌ها
-python code/error_analysis.py      # تحلیل خطا
-python code/plot_results.py        # نمودارها
-```
-
----
-
-## 📊 نتایج کلیدی
-
-### عملکرد Cross-Validation (۵-Fold Stratified)
-
-| مدل | میانگین Macro-F1 | انحراف معیار |
-|---|---|---|
-| Naive Bayes | ۰.۲۲۸۸ | ±۰.۰۳۲۰ |
-| Logistic Regression | ۰.۸۴۶۶ | ±۰.۰۴۳۶ |
-| **Linear SVM** | **۰.۸۷۰۸** | **±۰.۰۳۱۱** |
-| Random Forest | ۰.۸۶۱۱ | ±۰.۰۷۴۷ |
-
-### عملکرد نهایی Linear SVM روی تست
-
-| معیار | مقدار |
-|---|---|
-| Accuracy | **۰.۹۳** |
-| Macro-F1 | **۰.۹۲۳۷** |
-| Weighted-F1 | ۰.۹۳ |
-
----
-
-## 🔬 نوآوری‌های پروژه
-
-۱. **اولین benchmark فارسی** برای تشخیص خودکار نوع حملات مهندسی اجتماعی
-۲. **روش برچسب‌گذاری ضعیف** شفاف و قابل بازتولید
-۳. **تحلیل خطای معنادار** — تمام خطاها در مرزهای کلاس‌های هم‌پوشان مفهومی رخ داده‌اند
-۴. **تفسیرپذیری مدل** — استخراج ۱۰ کلمه‌ی کلیدی مؤثر در تصمیم‌گیری
-
----
-
-## 📜 لایسنس
-
-این پروژه برای اهداف **پژوهشی و آموزشی** منتشر شده است. حقوق معنوی کتاب‌های مرجع اصلی، متعلق به نویسندگان و ناشران آن‌هاست.
-
----
-
-## 👤 نویسنده
-
-**[صمد سهراب]**
----
-
-## 🙏 تقدیر
+📜 لایسنس
+این پروژه برای اهداف پژوهشی و آموزشی تحت لایسنس MIT منتشر شده است.
 
 
-از سازندگان دیتاست [Social Engineering Q&A Dataset (Persian)](https://huggingface.co/datasets/smd20/social-engineering-qa-persian) که دیتاست خود را به‌صورت عمومی منتشر کردند، صمیمانه سپاسگزاریم.
+👤 نویسنده
+صمد سهراب
